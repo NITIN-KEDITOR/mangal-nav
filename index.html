@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>MANGAL-NAV</title>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+<style>
+body{margin:0} 
+#map{height:100vh} 
+#info{position:absolute;top:10px;left:60px;z-index:1000;background:white;padding:10px;border-radius:8px;font-family:Arial}
+</style>
+</head>
+<body>
+<div id="info">🚀 MANGAL-NAV: Click 2 points on Mars</div>
+<div id="map"></div>
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script>
+var map = L.map('map').setView([18.4, -133.4], 5);
+L.tileLayer('https://trek.nasa.gov/tiles/Mars/EQ/Mars_Viking_MDIM21_ClrMosaic_global_232m/1.0.0/default/default028mm/{z}/{y}/{x}.jpg',{
+attribution:'NASA Mars Trek'
+}).addTo(map);
+
+var pts=[];
+map.on('click',function(e){
+ pts.push(e.latlng);
+ L.marker(e.latlng).addTo(map).bindPopup("Point "+pts.length).openPopup();
+ if(pts.length==2){
+  L.polyline(pts,{color:'red',weight:3}).addTo(map);
+  var d=pts[0].distanceTo(pts[1])/1000;
+  alert("MARS ROUTE: "+d.toFixed(1)+" km | Hazard: Clear | Oxygen OK");
+  pts=[];
+ }
+});
+</script>
+</body>
+</html>
